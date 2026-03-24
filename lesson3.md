@@ -1,19 +1,14 @@
 ## Install reactjs
 
 ### Install use `npm`
-
-```bash
-npm init
-npm install react react-dom
-
-### Installation
+#### Installation
 
 ```bash
 cd lesson3
 npx create-react-app .
 ```
 
-### Run applicationcd ..
+#### Run applicationcd ..
 ```bash
 npm run start
 ```
