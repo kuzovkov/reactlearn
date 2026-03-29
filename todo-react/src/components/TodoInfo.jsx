@@ -1,7 +1,8 @@
 const TodoInfo = (props) => {
   const {
       total,
-      done
+      done,
+      onDeleteButtonClick
   } = props;
   const hasTasks = total > 0;
   return (
@@ -10,7 +11,9 @@ const TodoInfo = (props) => {
         Done {done} of {total}
       </div>
         {hasTasks && (
-          <button className="todo__delete-all-button" type="button">Delete all</button>
+          <button className="todo__delete-all-button" type="button" onClick={onDeleteButtonClick}>
+            Delete all
+          </button>
         )}
     </div>
   );

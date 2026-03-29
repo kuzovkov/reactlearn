@@ -1,4 +1,6 @@
 ## Create react app
+https://www.youtube.com/playlist?list=PL0MUAHwery4omH4GyVQ-lI2R326tOdN7A
+
 
 ```bash
 npm create vite@7.0.3
