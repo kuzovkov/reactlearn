@@ -2,8 +2,15 @@ import AddTaskForm from "./AddTaskForm";
 import SearchTaskForm from "./SearchTaskForm";
 import TodoInfo from "./TodoInfo";
 import TodoList from "./TodoList";
-import {useState, useEffect} from "react";
+import Button from "./Button";
+import {useState, useEffect, useRef} from "react";
 
+// userRef - это хук, который позволяет сохранять мутируемое значение, 
+// которое не вызывает повторный рендер при изменении. 
+// Он возвращает объект с единственным свойством current, которое может быть изменено.
+//  Обычно useRef используется для доступа к DOM-элементам или для хранения значения,
+//  которое должно сохраняться между рендерами, но не должно вызывать повторный рендер
+//  при изменении.
 const Todo = () => {
   
   const [tasks, setTasks] = useState(() => {
@@ -29,6 +36,10 @@ const Todo = () => {
 
   const [newTaskTitle, setNewTaskTitle] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
+  const newTaskInputRef = useRef(null);
+  const firstIncompleteTaskRef = useRef(null);
+  const firstIncompleteTaskId = tasks.find(task => !task.isDone).id;
+  const renderCountRef = useRef(0);
 
   const deleteAllTasks = () => {
     const isConfirmed = window.confirm('Are you sure you want to delete all tasks?');
@@ -66,6 +77,7 @@ const Todo = () => {
       setTasks([...tasks, newTask]);
       setNewTaskTitle('');
       setSearchQuery('');
+      newTaskInputRef.current.focus();
     }
   };
 
@@ -74,6 +86,15 @@ const Todo = () => {
     localStorage.setItem('tasks', JSON.stringify(tasks));
     
   }, [tasks]);
+
+  useEffect(() => {
+    newTaskInputRef.current.focus();
+  }, []);
+
+  useEffect(() => {
+    renderCountRef.current = renderCountRef.current + 1;
+    console.log('render count', renderCountRef.current);
+  });
 
   const clearSearchQuery = searchQuery.trim().toLowerCase();
   const filteredTasks = clearSearchQuery? tasks.filter(task => task.title.toLowerCase().includes(clearSearchQuery)) : null;
@@ -84,8 +105,9 @@ const Todo = () => {
       <AddTaskForm 
         addTask={addTask} 
         newTaskTitle={newTaskTitle} 
-        setNewTaskTitle={setNewTaskTitle} 
-        />
+        setNewTaskTitle={setNewTaskTitle}
+        newTaskInputRef={newTaskInputRef}
+       />
       <SearchTaskForm  
         searchQuery={searchQuery}
         setSearchQuery={setSearchQuery}
@@ -95,9 +117,12 @@ const Todo = () => {
         done={tasks.filter(task => task.isDone).length} 
         onDeleteButtonClick={deleteAllTasks} 
         />
+      <Button onClick={() => {firstIncompleteTaskRef.current?.scrollIntoView({ behavior: 'smooth' })}}>Show first incomplete task</Button>  
       <TodoList 
         tasks={tasks}
-        filteredTasks={filteredTasks} 
+        filteredTasks={filteredTasks}
+        firstIncompleteTaskRef={firstIncompleteTaskRef}
+        firstIncompleteTaskId={firstIncompleteTaskId} 
         onDeleteTaskButtonClick={deleteTask}
         onClickTaskDoneButton={toggleTaskDone} 
        />
