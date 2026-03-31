@@ -1,7 +1,8 @@
 import TodoItem from "./TodoItem";
+import {memo} from 'react';
 
 const TodoList = (props) => {
-
+  console.log('TodoList');
   const {
       tasks=[],
       onDeleteTaskButtonClick,
@@ -36,4 +37,4 @@ const TodoList = (props) => {
   );
 };
 
-export default TodoList;
+export default memo(TodoList);

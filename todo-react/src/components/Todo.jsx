@@ -3,7 +3,7 @@ import SearchTaskForm from "./SearchTaskForm";
 import TodoInfo from "./TodoInfo";
 import TodoList from "./TodoList";
 import Button from "./Button";
-import {useState, useEffect, useRef} from "react";
+import {useState, useEffect, useRef, useCallback, useMemo} from "react";
 
 // userRef - это хук, который позволяет сохранять мутируемое значение, 
 // которое не вызывает повторный рендер при изменении. 
@@ -41,21 +41,44 @@ const Todo = () => {
   const firstIncompleteTaskId = tasks.find(task => !task.isDone).id;
   const renderCountRef = useRef(0);
 
-  const deleteAllTasks = () => {
+  // useCallback - это хук, который позволяет мемоизировать функцию,
+  //  чтобы она не пересоздавалась при каждом рендере, если ее зависимости не изменились. 
+  // Это может быть полезно для оптимизации производительности, особенно при передаче функции 
+  // в дочерние компоненты, которые зависят от нее и могут вызывать повторные рендеры.
+  // const memorizedFn = useCallback(() => {
+  //   console.log('memorized function');
+  // }, [/*зависимости*/]);
+
+  const deleteAllTasks = useCallback(() => {
     const isConfirmed = window.confirm('Are you sure you want to delete all tasks?');
     if (isConfirmed) {
       setTasks([]);
     }
-  }
+  }, []);
 
-  const deleteTask = (id) => {
+  // const deleteAllTasks = () => {
+  //   const isConfirmed = window.confirm('Are you sure you want to delete all tasks?');
+  //   if (isConfirmed) {
+  //     setTasks([]);
+  //   }
+  // }
+
+  const deleteTask = useCallback((id) => {
     const isConfirmed = window.confirm('Are you sure you want to delete this task?');
     if (isConfirmed) {
       setTasks(tasks.filter(task => task.id !== id));
     }
-  }
+  }, [tasks]); 
 
-  const toggleTaskDone = (id, isDone) => {
+
+  // const deleteTask = (id) => {
+  //   const isConfirmed = window.confirm('Are you sure you want to delete this task?');
+  //   if (isConfirmed) {
+  //     setTasks(tasks.filter(task => task.id !== id));
+  //   }
+  // }
+
+  const toggleTaskDone = useCallback((id, isDone) => {
     setTasks(tasks.map(task => {
       if (task.id === id) {
         return {
@@ -65,21 +88,47 @@ const Todo = () => {
       }
       return task;
     }));
-  }
+  }, [tasks]);
 
-  const addTask = () => {
+  // const toggleTaskDone = (id, isDone) => {
+  //   setTasks(tasks.map(task => {
+  //     if (task.id === id) {
+  //       return {
+  //         ...task,
+  //         isDone
+  //       }
+  //     }
+  //     return task;
+  //   }));
+  // }
+
+  const addTask = useCallback(() => {
     if (newTaskTitle.trim().length > 0) {
       const newTask = {
         id: crypto?.randomUUID() ?? Date.now().toString(),
         title: newTaskTitle,
         isDone: false
       }
-      setTasks([...tasks, newTask]);
+      setTasks((prevTasks) => [...prevTasks, newTask]);
       setNewTaskTitle('');
       setSearchQuery('');
       newTaskInputRef.current.focus();
     }
-  };
+  }, [newTaskTitle]);
+
+  // const addTask = () => {
+  //   if (newTaskTitle.trim().length > 0) {
+  //     const newTask = {
+  //       id: crypto?.randomUUID() ?? Date.now().toString(),
+  //       title: newTaskTitle,
+  //       isDone: false
+  //     }
+  //     setTasks([...tasks, newTask]);
+  //     setNewTaskTitle('');
+  //     setSearchQuery('');
+  //     newTaskInputRef.current.focus();
+  //   }
+  // };
 
   useEffect(() => {
     console.log('tasks have been updated', tasks);
@@ -93,11 +142,24 @@ const Todo = () => {
 
   useEffect(() => {
     renderCountRef.current = renderCountRef.current + 1;
-    console.log('render count', renderCountRef.current);
+    //console.log('render count', renderCountRef.current);
   });
 
-  const clearSearchQuery = searchQuery.trim().toLowerCase();
-  const filteredTasks = clearSearchQuery? tasks.filter(task => task.title.toLowerCase().includes(clearSearchQuery)) : null;
+  // useMemo - это хук, который позволяет мемоизировать результат вычисления функции,
+  //  чтобы он не пересчитывался при каждом рендере, если его зависимости не изменились. 
+  // Это может быть полезно для оптимизации производительности, особенно при выполнении 
+  // дорогих вычислений или при рендеринге больших списков данных. 
+  // const clearSearchQuery = searchQuery.trim().toLowerCase();
+  const filteredTasks = useMemo(() => {
+    const clearSearchQuery = searchQuery.trim().toLowerCase();
+    return clearSearchQuery ? tasks.filter(task => task.title.toLowerCase().includes(clearSearchQuery)) : null;
+  }, [tasks, searchQuery]);
+  //
+  // const filteredTasks = clearSearchQuery? tasks.filter(task => task.title.toLowerCase().includes(clearSearchQuery)) : null;
+
+  const tasksDoneCount = useMemo(() => {
+    return tasks.filter(task => task.isDone).length;
+  }, [tasks]);
 
   return (
      <div className="todo">
@@ -114,7 +176,7 @@ const Todo = () => {
       />
       <TodoInfo 
         total={tasks.length} 
-        done={tasks.filter(task => task.isDone).length} 
+        done={tasksDoneCount} 
         onDeleteButtonClick={deleteAllTasks} 
         />
       <Button onClick={() => {firstIncompleteTaskRef.current?.scrollIntoView({ behavior: 'smooth' })}}>Show first incomplete task</Button>  
