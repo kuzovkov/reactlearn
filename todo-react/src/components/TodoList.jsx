@@ -1,16 +1,28 @@
 import TodoItem from "./TodoItem";
 import {memo} from 'react';
+import { useContext } from 'react';
+import { TaskContext } from '../context/taskContext'; 
 
-const TodoList = (props) => {
+// используем useContext для получения данных из контекста, чтобы не 
+// прокидывать пропсы через все уровни компонентов
+// const TodoList = (props) => {
+
+//const TodoList = (props) => {
+const TodoList = () => {
   console.log('TodoList');
+  // const {
+  //     tasks=[],
+  //     onDeleteTaskButtonClick,
+  //     onClickTaskDoneButton,
+  //     filteredTasks,
+  //     firstIncompleteTaskRef,
+  //     firstIncompleteTaskId
+  // } = props;
+
   const {
-      tasks=[],
-      onDeleteTaskButtonClick,
-      onClickTaskDoneButton,
-      filteredTasks,
-      firstIncompleteTaskRef,
-      firstIncompleteTaskId
-  } = props;
+    tasks,
+    filteredTasks,
+  } = useContext(TaskContext);
   const hasTasks = tasks.length > 0;
   const isEmptyFilteredTasks = filteredTasks?.length === 0;
   
@@ -28,9 +40,9 @@ const TodoList = (props) => {
         <TodoItem 
           key={task.id} {...task} 
           className="todo__item"
-          ref = {task.id === firstIncompleteTaskId ? firstIncompleteTaskRef : null} 
-          onDeleteButtonClick={onDeleteTaskButtonClick} 
-          onClickTaskDoneButton={onClickTaskDoneButton} 
+          // ref = {task.id === firstIncompleteTaskId ? firstIncompleteTaskRef : null} 
+          // onDeleteButtonClick={deleteTask} 
+          // onClickTaskDoneButton={toggleTaskDone} 
         />
       ))} 
     </ul>

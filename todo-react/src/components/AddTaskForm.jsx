@@ -1,13 +1,19 @@
 import Field from "./Field"
 import Button from "./Button"
+import { useContext } from "react";
+import { TaskContext } from '../context/taskContext'; 
 
-const AddTaskForm = (props) => {
+// используем useContext для получения данных из контекста, чтобы не 
+// прокидывать пропсы через все уровни компонентов
+
+// const AddTaskForm = (props) => {
+const AddTaskForm = (pros) => {
   const { 
     addTask, 
-    newTaskTitle,
+    newTaskTitle,  
      setNewTaskTitle,
      newTaskInputRef 
-    } = props;
+    } = useContext(TaskContext);
 
   const onSubmit = (e) => {
     e.preventDefault();
