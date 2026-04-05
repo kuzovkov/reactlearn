@@ -64,5 +64,23 @@ react по-умолчанию экранирует строки (скрипты 
 пример вывода сырого html
 
 
+### Тестирование и отладка React-компонентов: React DevTools на практике
+
+Install barowser extension ReatDevelopmetToools
+
+В DevToos появятся 2 новые вкладки Componets* и Profiler*
+
+
+### Тестирование и отладка React-компонентов: React DevTools на практике
+
+Install barowser extension ReatDevelopmetToools
+
+В DevToos появятся 2 новые вкладки Componets* и Profiler*
+
+жмем в  Profiler* шестеренку
+￼включаем Highlight updates when components render
+
+теперь при рендеринге подсвечиваются перерисовываемые компоненты
+
 
 
