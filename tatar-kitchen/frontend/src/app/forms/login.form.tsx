@@ -2,15 +2,12 @@
 
 import {Check} from "@gravity-ui/icons";
 import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
-import { useState } from "react";
 
-export function LoginForm() {
+interface LoginFormProps {
+  onCancel?: () => void;
+}
 
-  const [formData, setFormData] = useState({
-    'email': '',
-    'password': '',
-  });
-
+export function LoginForm({ onCancel }: LoginFormProps) {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -25,12 +22,11 @@ export function LoginForm() {
   };
 
   return (
-    <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
+    <Form className="flex w-full max-w-sm flex-col gap-4 text-gray-100" onSubmit={onSubmit}>
       <TextField
         isRequired
         name="email"
         type="email"
-        value={formData.email}
       >
         <Label>Email</Label>
         <Input placeholder="john@example.com" />
@@ -42,7 +38,6 @@ export function LoginForm() {
         minLength={8}
         name="password"
         type="password"
-        value={formData.password}
         validate={(value) => {
           if (value.length < 8) {
             return "Password must be at least 8 characters";
@@ -68,7 +63,7 @@ export function LoginForm() {
           <Check />
           Войти
         </Button>
-        <Button type="reset" variant="secondary">
+        <Button type="button" variant="secondary" onClick={onCancel}>
           Отмена
         </Button>
       </div>

@@ -1,17 +1,15 @@
-import { RegistrationForm } from "@/app/forms/registration.form"
-import { CustomModal } from "@/components/common/modal"
+import { RegistrationForm } from "@/app/forms/registration.form";
+import { CustomModal } from "@/components/common/modal";
 
-
-
-export const RegistrationModal = ({ isOpen, onClose, title, children }) => {
-
-  return (
-      <CustomModal isOpen={isOpen} onClose={onClose} title={title}>
-        <RegistrationForm></RegistrationForm>
-
-      </CustomModal>
-
-    )
-
-
+interface ModalProps {
+  isOpen: boolean;
+  onClose: () => void;
 }
+
+export const RegistrationModal = ({ isOpen, onClose }: ModalProps) => {
+  return (
+    <CustomModal isOpen={isOpen} onClose={onClose} title="Регистрация" size="sm">
+      <RegistrationForm onCancel={onClose} />
+    </CustomModal>
+  );
+};

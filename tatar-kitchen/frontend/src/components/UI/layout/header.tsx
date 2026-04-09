@@ -6,6 +6,8 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { siteConfig } from "@/config/site.config";
 import { layoutConfig } from "@/config/layout.config";
+import { LoginModal } from "@/components/UI/modals/login.modal";
+import { RegistrationModal } from "@/components/UI/modals/registration.modal";
 
 interface NavItem {
   label: string;
@@ -17,11 +19,6 @@ const navItems: NavItem[] = [
   { label: "Рецепты", href: "/" },
   { label: "Ингридиенты", href: "/ingridients" },
   { label: "О нас", href: "/about" },
-];
-
-const authItems: NavItem[] = [
-  { label: "Войти", href: "/login" },
-  { label: "Зарегистрироваться", href: "/register" },
 ];
 
 const Logo = () => {
@@ -47,21 +44,58 @@ const NavLink = ({ item, isMobile, onClick }: { item: NavItem; isMobile: boolean
   const pathname = usePathname();
   const isActive = pathname === item.href;
   return (
-  <Link
-    key={item.href}
-    href={item.href}
-    onClick={onClick}
-    className={`${isMobile ? "block px-4 py-3" : "px-4 py-2"} ${isActive ? "text-amber-400" : "text-gray-300 hover:text-amber-400"} font-medium rounded-lg hover:bg-gray-800 transition-all duration-200 relative group`}
-  >
+    <Link
+      href={item.href}
+      onClick={onClick}
+      className={`${isMobile ? "block px-4 py-3" : "px-4 py-2"} ${isActive ? "text-amber-400" : "text-gray-300 hover:text-amber-400"} font-medium rounded-lg hover:bg-gray-800 transition-all duration-200 relative group`}
+    >
     {item.label}
     {!isMobile && (
       <span className={`absolute bottom-0 left-1/2 -translate-x-1/2 w-0 h-0.5 bg-gradient-to-r from-amber-400 to-orange-400 ${isActive ? "w-full" : "group-hover:w-full"} transition-all duration-300`} />
     )}
-  </Link>
-)};
+    </Link>
+  );
+};
+
+const AuthButton = ({
+  label,
+  onClick,
+  isMobile = false,
+}: {
+  label: string;
+  onClick: () => void;
+  isMobile?: boolean;
+}) => {
+  const baseClasses =
+    "text-gray-300 font-medium rounded-lg transition-all duration-200 hover:text-amber-400 hover:bg-gray-800";
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={`${
+        isMobile ? "block w-full text-left px-4 py-3" : "px-4 py-2"
+      } ${baseClasses}`}
+    >
+      {label}
+    </button>
+  );
+};
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isRegistrationModalOpen, setIsRegistrationModalOpen] = useState(false);
+
+  const openLoginModal = () => {
+    setIsMenuOpen(false);
+    setIsLoginModalOpen(true);
+  };
+
+  const openRegistrationModal = () => {
+    setIsMenuOpen(false);
+    setIsRegistrationModalOpen(true);
+  };
 
   return (
     <header 
@@ -77,9 +111,8 @@ export default function Header() {
           </nav>
 
           <div className="hidden md:flex items-center gap-3 ml-4">
-            {authItems.map((item) => (
-              <NavLink key={item.href} item={item} isMobile={false} />
-            ))}
+            <AuthButton label="Войти" onClick={openLoginModal} />
+            <AuthButton label="Зарегистрироваться" onClick={openRegistrationModal} />
           </div>
 
           <button
@@ -118,12 +151,19 @@ export default function Header() {
               <NavLink key={item.href} item={item} isMobile={true} onClick={() => setIsMenuOpen(false)} />
             ))}
             <div className="border-t border-gray-700 my-2" />
-            {authItems.map((item) => (
-              <NavLink key={item.href} item={item} isMobile={true} onClick={() => setIsMenuOpen(false)} />
-            ))}
+            <div className="space-y-1 px-2">
+              <AuthButton label="Войти" onClick={openLoginModal} isMobile />
+              <AuthButton label="Зарегистрироваться" onClick={openRegistrationModal} isMobile />
+            </div>
           </nav>
         )}
       </div>
+
+      <LoginModal isOpen={isLoginModalOpen} onClose={() => setIsLoginModalOpen(false)} />
+      <RegistrationModal
+        isOpen={isRegistrationModalOpen}
+        onClose={() => setIsRegistrationModalOpen(false)}
+      />
     </header>
   );
 }

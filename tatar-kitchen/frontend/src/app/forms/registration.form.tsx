@@ -2,16 +2,12 @@
 
 import {Check} from "@gravity-ui/icons";
 import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
-import { useState } from "react";
 
-export function RegistrationForm() {
+interface RegistrationFormProps {
+  onCancel?: () => void;
+}
 
-  const [formData, setFormData] = useState({
-    'email': '',
-    'password': '',
-    'consfirm_password': '',
-  });
-
+export function RegistrationForm({ onCancel }: RegistrationFormProps) {
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
@@ -26,12 +22,11 @@ export function RegistrationForm() {
   };
 
   return (
-    <Form className="flex w-96 flex-col gap-4" onSubmit={onSubmit}>
+    <Form className="flex w-full max-w-sm flex-col gap-4 text-gray-100" onSubmit={onSubmit}>
       <TextField
         isRequired
         name="email"
         type="email"
-        value={formData.email}
         validate={(value) => {
           if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(value)) {
             return "Please enter a valid email address";
@@ -50,7 +45,6 @@ export function RegistrationForm() {
         minLength={8}
         name="password"
         type="password"
-        value={formData.password}
         validate={(value) => {
           if (value.length < 8) {
             return "Password must be at least 8 characters";
@@ -76,7 +70,6 @@ export function RegistrationForm() {
         minLength={8}
         name="confirm_password"
         type="confirm_password"
-        value={formData.consfirm_password}
         validate={(value) => {
           if (value.length < 8) {
             return "Password must be at least 8 characters";
@@ -102,7 +95,7 @@ export function RegistrationForm() {
           <Check />
           Регистрация
         </Button>
-        <Button type="reset" variant="secondary">
+        <Button type="button" variant="secondary" onClick={onCancel}>
           Отмена
         </Button>
       </div>
