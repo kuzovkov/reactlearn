@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { siteConfig } from "@/site.config";
+import { siteConfig } from "@/config/site.config";
+import { layoutConfig } from "@/config/layout.config";
 
 interface NavItem {
   label: string;
@@ -63,7 +64,9 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="sticky top-0 z-50 w-full backdrop-blur-md bg-gray-900/95 border-b border-gray-800 shadow-lg">
+    <header 
+    style={{height: `${layoutConfig.headerHeight}`}}
+    className={`sticky top-0 z-50 w-full backdrop-blur-md bg-gray-900/95 border-b border-gray-800 shadow-lg`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">     
           <Logo />
