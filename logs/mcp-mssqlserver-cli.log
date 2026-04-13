@@ -1,0 +1,8 @@
+2026-04-10T09:23:41.450Z | INFO | Starting MCP MSSQL Server from: /home/user1/.npm/_npx/ffdd41263fd07c20/node_modules/@liangshanli/mcp-server-mssqlserver/src/server-final.js
+2026-04-10T09:23:41.455Z | INFO | Starting MCP MSSQL Server with environment: | {"MSSQL_SERVER":"127.0.0.1","MSSQL_PORT":"23306","MSSQL_USER":"coremgr","MSSQL_DATABASE":"maxmara","MSSQL_SCHEMA":"maxmara","MSSQL_ENCRYPT":"false","MSSQL_TRUST_SERVER_CERTIFICATE":"true","ALLOW_DDL":"false","ALLOW_DROP":"false","ALLOW_DELETE":"false"}
+2026-04-10T09:23:41.458Z | INFO | MCP MSSQL Server process started with PID: 175081
+2026-04-10T09:23:41.458Z | INFO | Signal handlers registered for SIGINT and SIGTERM
+2026-04-10T09:23:41.458Z | INFO | Press Ctrl+C to gracefully shutdown the server
+2026-04-10T10:43:43.087Z | INFO | MCP MSSQL Server exited with code: 1
+2026-04-10T10:43:43.092Z | ERROR | Uncaught exception in CLI: | {"error":"write EPIPE","stack":"Error: write EPIPE\n    at afterWriteDispatched (node:internal/stream_base_commons:160:15)\n    at writeGeneric (node:internal/stream_base_commons:151:3)\n    at Socket._writeGeneric (node:net:952:11)\n    at Socket._write (node:net:964:8)\n    at writeOrBuffer (node:internal/streams/writable:564:12)\n    at _write (node:internal/streams/writable:493:10)\n    at Writable.write (node:internal/streams/writable:502:10)\n    at writeLog (/home/user1/.npm/_npx/ffdd41263fd07c20/node_modules/@liangshanli/mcp-server-mssqlserver/bin/cli.js:52:20)\n    at ChildProcess.<anonymous> (/home/user1/.npm/_npx/ffdd41263fd07c20/node_modules/@liangshanli/mcp-server-mssqlserver/bin/cli.js:118:3)\n    at ChildProcess.emit (node:events:518:28)"}
+2026-04-10T10:43:43.094Z | INFO | CLI process exiting with code: 1

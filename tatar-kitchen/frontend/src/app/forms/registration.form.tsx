@@ -1,5 +1,7 @@
 "use client";
 
+import { registerUser } from "@/actions/register";
+import { prisma } from "@/utils/prisma";
 import {Check} from "@gravity-ui/icons";
 import {Button, Description, FieldError, Form, Input, Label, TextField} from "@heroui/react";
 
@@ -8,17 +10,22 @@ interface RegistrationFormProps {
 }
 
 export function RegistrationForm({ onCancel }: RegistrationFormProps) {
-  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const formData = new FormData(e.currentTarget);
-    const data: Record<string, string> = {};
+    const data: any = {};
 
     // Convert FormData to plain object
     formData.forEach((value, key) => {
       data[key] = value.toString();
     });
 
-    alert(`Form submitted with: ${JSON.stringify(data, null, 2)}`);
+    const res = await registerUser(data);
+    console.log('res:', res)
+    if (res){
+      alert('Регистрация успешна')
+    }
+    onCancel();
   };
 
   return (
