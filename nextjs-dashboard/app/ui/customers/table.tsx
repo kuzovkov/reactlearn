@@ -5,6 +5,7 @@ import {
   CustomersTableType,
   FormattedCustomersTable,
 } from '@/app/lib/definitions';
+import styles from '@/app/ui/home.module.css';
 
 export default async function CustomersTable({
   customers,
